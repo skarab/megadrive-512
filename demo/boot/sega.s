@@ -1,7 +1,6 @@
 .section .text.keepboot
 
-        .org    0x00000000
-
+.org    0x00000000
 _Start_Of_Rom:
 _Vecteurs_68K:
         dc.l    0x00FFFE00
@@ -14,5 +13,3 @@ _Vecteurs_68K:
 Header:
 	.ascii	 "SEGA"
 
-_INT:
-        rte

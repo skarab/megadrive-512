@@ -32,8 +32,6 @@ void wait(u16 time)
 
 void main()
 {
-    vu16 *pw;
-    vu32 *pl;
     u16 i,v, j, k;
 
     init();
