@@ -4,33 +4,15 @@
 
 _Start_Of_Rom:
 _Vecteurs_68K:
-        dc.l    0x00FFFE00              /* Stack address */
-        dc.l    main            /* Program start address */
+        dc.l    0x00FFFE00
+        dc.l    main
 	
-        dc.l    _INT
-        dc.l    _INT
-        dc.l    _INT
-        dc.l    _INT
-        dc.l    _INT
-        dc.l    _INT
-        dc.l    _INT
-        dc.l    _INT
-        dc.l    _INT
-        dc.l    _INT
-        dc.l     _INT, _INT, _INT, _INT
-        dc.l     _INT, _INT, _INT, _INT
-        dc.l     _INT, _INT, _INT, _INT
-        dc.l    _INT, _INT, _INT, _INT
-        dc.l    _INT
-        dc.l    _INT
-        dc.l    _INT
-        dc.l    _INT 
-        dc.l    _INT,_INT,_INT,_INT,_INT,_INT,_INT,_INT
-        dc.l    _INT,_INT,_INT,_INT,_INT,_INT,_INT,_INT
-        dc.l    _INT,_INT,_INT,_INT,_INT,_INT,_INT,_INT
-        dc.l    _INT,_INT,_INT,_INT,_INT,_INT,_INT,_INT
+        move.w	#0x2700, sr
+        move.l	Header(pc), 0xA4000
 
-        .incbin "boot/rom_head.bin", 0x10, 0x98
+.org 0x100
+Header:
+	.ascii	 "SEGA"
 
 _INT:
         rte

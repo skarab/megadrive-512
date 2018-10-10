@@ -23,8 +23,8 @@ MKISOFS = mkisofs
 
 OPTION =
 INCS = -I. -I$(GENDEV)/m68k-elf/include -I$(GENDEV)/m68k-elf/m68k-elf/include
-CCFLAGS = $(OPTION) -m68000 -Wall -O2 -c -fomit-frame-pointer
-HWCCFLAGS = $(OPTION) -m68000 -Wall -O1 -c -fomit-frame-pointer
+CCFLAGS = $(OPTION) -m68000 -Wall -Os -c -fomit-frame-pointer
+HWCCFLAGS = $(OPTION) -m68000 -Wall -Os -c -fomit-frame-pointer
 Z80FLAGS = -vb2
 ASFLAGS = -m68000 --register-prefix-optional
 LIBS =  -L$(GENDEV)/m68k-elf/lib -L$(GENDEV)/m68k-elf/lib/gcc/m68k-elf/* -L$(GENDEV)/m68k-elf/m68k-elf/lib -lnosys 
@@ -53,9 +53,6 @@ OBJS = $(RESOURCES)
 all: out.bin 
 	gens out.bin
 
-boot/sega.o: boot/rom_head.bin
-	$(AS) $(ASFLAGS) boot/sega.s -o $@
-
 %.bin: %.elf
 	$(OBJC) -O binary $< temp.bin
 	dd if=temp.bin of=$@ conv=sync
@@ -74,9 +71,6 @@ boot/sega.o: boot/rom_head.bin
 
 %.o: %.s 
 	$(AS) $(ASFLAGS) $< -o $@
-
-boot/rom_head.bin: boot/rom_head.o
-	$(LD) $(LINKFLAGS) --oformat binary -o $@ $<
 
 clean:
 	$(RM) $(RESOURCES)
