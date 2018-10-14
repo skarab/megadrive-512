@@ -6,6 +6,8 @@ typedef volatile u32 vu32;
 #define GFX_DATA_PORT           0xC00000
 #define GFX_CTRL_PORT           0xC00004
 #define GFX_WRITE_CRAM_ADDR(adr)    ((0xC000 + ((adr) & 0x3FFF)) << 16) + (((adr) >> 14) | 0x00)
+#define VDP_DMABUSY_FLAG (1 << 1)
+#define GET_VDPSTATUS(flag) ((*(vu16*)(GFX_CTRL_PORT)) & (flag))
 
 static const unsigned char regValues[] = { 0x04, 0x74, 0xE000, 0xD000, 0xC000, 0xDC00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x81, 0xD800, 0x00, 0x02, 0x01, 0x00, 0x00 };
 static const u16 colors[] = {  15|0<<4|0<<8, 0|15<<4|0<<8, 0|0<<4|15<<8 };
@@ -23,11 +25,16 @@ void set_color(u16 color)
     *(vu16*) GFX_DATA_PORT = color;
 }
 
+void wait_dma()
+{
+    while(GET_VDPSTATUS(VDP_DMABUSY_FLAG));
+}
+
 void wait(u16 time)
 {
     u16 k;
-    for (k=0 ; k<time ; ++k)
-        init();
+    for (k=0 ; k<time*20 ; ++k)
+        wait_dma();
 }
 
 void main()

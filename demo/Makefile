@@ -72,6 +72,9 @@ all: out.bin
 %.o: %.s 
 	$(AS) $(ASFLAGS) $< -o $@
 
+%.s: %.res
+	$(RESCOMP) $< $@
+
 clean:
 	$(RM) $(RESOURCES)
 	$(RM) *.o *.bin *.elf *.elf_scd *.map *.iso
