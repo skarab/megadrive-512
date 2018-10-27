@@ -27,6 +27,7 @@ CCFLAGS = $(OPTION) -m68000 -Wall -Os -c -fomit-frame-pointer
 HWCCFLAGS = $(OPTION) -m68000 -Wall -Os -c -fomit-frame-pointer
 Z80FLAGS = -vb2
 ASFLAGS = -m68000 --register-prefix-optional
+#LIBS =  -L$(GENDEV)/m68k-elf/lib -L$(GENDEV)/m68k-elf/lib/gcc/m68k-elf/4.8.2 -L$(GENDEV)/m68k-elf/m68k-elf/lib -lc -lgcc -lnosys -lm 
 LIBS =  -L$(GENDEV)/m68k-elf/lib -L$(GENDEV)/m68k-elf/lib/gcc/m68k-elf/* -L$(GENDEV)/m68k-elf/m68k-elf/lib -lnosys 
 LINKFLAGS = -T $(GENDEV)/ldscripts/sgdk.ld -nostdlib 
 
@@ -36,6 +37,9 @@ BOOT_RESOURCES=
 BOOTSS=$(wildcard boot/*.s)
 BOOTSS+=$(wildcard src/boot/*.s)
 BOOT_RESOURCES+=$(BOOTSS:.s=.o)
+
+VGMS=$(wildcard res/*.vgm)
+RESOURCES+=$(VGMS:.vgm=.o)
 
 CS=$(wildcard src/*.c)
 SS=$(wildcard src/*.s)
@@ -71,6 +75,9 @@ all: out.bin
 
 %.o: %.s 
 	$(AS) $(ASFLAGS) $< -o $@
+
+%.s: %.vgm 
+	$(BINTOS) -align 256 $<
 
 %.s: %.res
 	$(RESCOMP) $< $@

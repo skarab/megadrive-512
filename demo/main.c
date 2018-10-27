@@ -1,7 +1,5 @@
-typedef unsigned short u16;
-typedef unsigned long u32;
-typedef volatile u16 vu16;
-typedef volatile u32 vu32;
+#include "sound.h"
+#include "res/sonic1.h"
 
 #define GFX_DATA_PORT           0xC00000
 #define GFX_CTRL_PORT           0xC00004
@@ -42,6 +40,9 @@ void main()
     u16 i,v, j, k;
 
     init();
+    wait_dma();
+
+    sound_play(sonic1);
 
     while (1)
     {
